@@ -60,6 +60,10 @@ module.exports.isDarwin = function() {
     return (os.platform() == 'darwin');
 };
 
+module.exports.isLinux = function() {
+    return (os.platform() == 'linux');
+};
+
 // Get valid target from framework/project.properties if run from this repo
 // Otherwise get target from project.properties file within a generated cordova-android project
 module.exports.get_target = function() {
@@ -117,6 +121,12 @@ module.exports.get_gradle_wrapper = function() {
                     androidStudioPath = path.join(process.env['ProgramFiles'], 'Android', program_dir[i], 'gradle');
                 } else { ++i; }
             }
+        }
+    } else if (module.exports.isLinux()) {
+        var androidBinPath = path.dirname(forgivingWhichSync('studio.sh'));
+        var androidPath = path.dirname(androidBinPath);
+        if (fs.existsSync(androidPath)) {
+            androidStudioPath = path.join(androidPath, 'gradle');
         }
     }
 
